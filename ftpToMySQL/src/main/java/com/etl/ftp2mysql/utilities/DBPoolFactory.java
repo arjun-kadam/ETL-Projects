@@ -21,6 +21,12 @@ public class DBPoolFactory {
         hikariDataSource.setPassword(cred.getPassword());
         hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
+        LocalContainerEntityManagerFactoryBean emfBean = getLocalContainerEntityManagerFactoryBean(hikariDataSource);
+
+        return  emfBean.getObject();
+    }
+
+    private static LocalContainerEntityManagerFactoryBean getLocalContainerEntityManagerFactoryBean(HikariDataSource hikariDataSource) {
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         properties.put("hibernate.hbm2ddl.auto", "none");
@@ -31,7 +37,6 @@ public class DBPoolFactory {
         emfBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         emfBean.setJpaPropertyMap(properties);
         emfBean.afterPropertiesSet();
-
-        return  emfBean.getObject();
+        return emfBean;
     }
 }
